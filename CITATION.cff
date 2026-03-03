@@ -1,0 +1,13 @@
+cff-version: 1.2.0
+title: DISCO – Dislocation Contrast Factor Calculator
+version: 1.0.0
+date-released: 2026-03-01
+authors:
+  - family-names: Malagutti
+    given-names: Marcelo Augusto
+  - family-names: D'Incau
+    given-names: Mirco
+  - family-names: Scardi
+    given-names: Paolo
+license: GPL-3.0
+doi: (ZENODO DOI AFTER RELEASE)
