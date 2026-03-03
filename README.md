@@ -1,162 +1,163 @@
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+Perfect — below is the **pure text version** (no emojis, no badges, no special formatting).
+You can copy and paste this directly into GitHub.
+
+---
 
 # DISCO – Dislocation Contrast Factor Calculator
 
-DISCO is a general Python-based software tool for the computation of **dislocation contrast factors (CFs)** for arbitrary crystal structures and slip systems.
+DISCO is a general Python-based software tool for the computation of dislocation contrast factors (CFs) for arbitrary crystal structures and slip systems.
 
 It implements the general formalism of Martinez-Garcia et al. (Acta Cryst. A65, 109–119, 2009) and extends it to all space groups and Laue symmetries.
 
 DISCO supports:
 
-- All 230 space groups
-- Single-crystal contrast factors
-- Powder-averaged contrast factors
-- Automatic symmetry handling
-- Automatic invariant polynomial coefficient extraction
-- TOPAS WPPM macro generation
+* All 230 space groups
+* Single-crystal contrast factors
+* Powder-averaged contrast factors
+* Automatic symmetry handling
+* Automatic invariant polynomial coefficient extraction
+* TOPAS WPPM macro generation
 
----
-
-## 📖 Scientific Reference
+## Scientific Reference
 
 If you use DISCO, please cite:
 
-Malagutti et al., *J. Appl. Crystallogr.* (2026).  
+Malagutti, M. A., D’Incau, M., & Scardi, P., Journal of Applied Crystallography (2026).
 DOI: (to be added)
 
 The theoretical basis follows:
 
-Martinez-Garcia, J. et al., Acta Cryst. A65, 109–119 (2009).  
-https://doi.org/10.1107/S010876730804186X
+Martinez-Garcia, J., Leoni, M., & Scardi, P. (2009).
+A general approach for determining the diffraction contrast factor of straight-line dislocations.
+Acta Crystallographica Section A, 65, 109–119.
+[https://doi.org/10.1107/S010876730804186X](https://doi.org/10.1107/S010876730804186X)
 
----
+## Software Availability
 
-## 🔗 Software Availability
-
-Source code:  
+Source code:
 GitHub: (repository link)
 
-Archived version (citable):  
-Zenodo DOI: (to be added)
+Archived version (citable):
+Zenodo DOI: (to be added after release)
 
-Web interface (JSON builder + server execution):  
-https://energymaterials.unitn.it/tools/software/disco.html
+Web interface (JSON builder + server execution):
+[https://energymaterials.unitn.it/tools/software/disco.html](https://energymaterials.unitn.it/tools/software/disco.html)
 
----
+## Requirements
 
-## ⚙ Requirements
+* Python ≥ 3.11
+* numpy
+* scipy
+* pandas
 
-- Python ≥ 3.11
-- numpy
-- scipy
-- pandas
+## Installation
 
----
+Linux / macOS:
 
-## 💻 Installation
-
-### Linux / macOS
-
-```bash
+```
 python3 -m pip install --upgrade pip
 python3 -m pip install . --upgrade
+```
 
-#Power shell
+Windows (PowerShell):
 
+```
 pip install . --upgrade
+```
 
+## Usage
 
-##Running disco
+Run DISCO with:
 
-discocf [-h] [-o OUTPUT_DIR] [input]
+```
+discocf input.json
+```
 
-positional arguments:
-  input                 Input JSON file (e.g. contrast_factors.json)
+Display help:
 
-options:
-  -h, --help            show this help message and exit
-  -o OUTPUT_DIR, --output-dir OUTPUT_DIR
-                        Directory where outputs will be written (default: <input_dir>/output_fit)
+```
+discocf --help
+```
 
----
+Specify a custom output directory:
 
-## 📂 Input File Overview
+```
+discocf input.json -o results_folder
+```
+
+By default, outputs are written to:
+
+```
+<input_directory>/output_fit
+```
+
+## Input File Overview
 
 DISCO requires a JSON file containing:
 
-- **Crystal structure:**
-  - `space_group`
-  - lattice parameters (`a`, `b`, `c`, `alpha`, `beta`, `gamma` as required)
+* Crystal structure
 
-- **Elastic stiffness constants** (in GPa)
+  * space_group
+  * lattice parameters (a, b, c, alpha, beta, gamma as required)
 
-- **Slip system definition:**
-  - Slip plane (`plane_hkl`)
-  - Burgers vector (`burgers_uvw`)
-  - Dislocation character angle (`phi_deg`)
-    - φ = 0° → screw
-    - φ = 90° → edge
+* Elastic stiffness constants (in GPa)
 
-- **List of diffraction reflections** (`hkls`)
+* Slip system definition
 
-Example input files are available in the `examples/` folder.
+  * plane_hkl
+  * burgers_uvw
+  * phi_deg
 
-A detailed description of the input structure is provided in:
+    * phi = 0° → screw
+    * phi = 90° → edge
 
+* List of diffraction reflections (hkls)
 
----
+Example input files are available in the examples folder.
 
-## 📊 Output Files
+A detailed description of the input structure is available in:
 
-DISCO generates:
-
-- **Single-crystal contrast factors**
-- **Powder-averaged contrast factors**
-- **Symmetry invariant coefficients (Γₕₖₗ expansion)**
-- **TOPAS macro snippet for WPPM**
-- **Detailed `.run.log` file** containing input parameters and intermediate data
-
-A full description of output files is available in:
+```
 docs/INPUT_FORMAT.md
+```
 
-
----
-
-## 📊 Output Files
+## Output Files
 
 DISCO generates:
 
-- **Single-crystal contrast factors**
-- **Powder-averaged contrast factors**
-- **Symmetry invariant coefficients (Γₕₖₗ expansion)**
-- **TOPAS macro snippet for WPPM**
-- **Detailed `.run.log` file** containing input parameters and intermediate data
+* Single-crystal contrast factors
+* Powder-averaged contrast factors
+* Symmetry invariant coefficients (Gamma_hkl expansion)
+* TOPAS macro snippet for WPPM
+* Detailed .run.log file containing input parameters and intermediate data
 
 A full description of output files is available in:
+
+```
 docs/OUTPUT_FORMAT.md
+```
 
+## License
 
----
-
-## 📜 License
-
-DISCO is distributed under the **GNU General Public License v3.0 (GPL-3.0)**.
+DISCO is distributed under the GNU General Public License v3.0 (GPL-3.0).
 
 Commercial use or integration into proprietary software requires explicit permission from the authors.
 
----
-
-## 📌 Version
+## Version
 
 DISCO v1.0.0 (2026)
 
+## Authors
+
+Marcelo A. Malagutti
+Mirco D’Incau
+Paolo Scardi
+
+Department of Civil, Environmental & Mechanical Engineering
+University of Trento, Italy
+
 ---
 
-## 👨‍🔬 Authors
+This version is clean plain text and will render properly in GitHub without special formatting.
 
-Marcelo A. Malagutti  
-Mirco D’Incau  
-Paolo Scardi  
-
-Department of Civil, Environmental & Mechanical Engineering  
-University of Trento, Italy
+If you want, I can now help you with the exact next step to safely publish the repository without mistakes.
