@@ -158,6 +158,3 @@ University of Trento, Italy
 
 ---
 
-This version is clean plain text and will render properly in GitHub without special formatting.
-
-If you want, I can now help you with the exact next step to safely publish the repository without mistakes.
