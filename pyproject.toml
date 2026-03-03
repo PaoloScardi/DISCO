@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "disco-cf"
+version = "0.1.0"
+description = "DISCO: Dislocation Contrast Factor calculator"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  {name = "M. A. Malagutti"},
+  {name = "P. Scardi"},
+]
+dependencies = ["numpy", "scipy", "pandas"]
+
+[project.scripts]
+discocf = "disco.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["cfactor*", "disco*"]
+exclude = ["output_fit*", "cFactor_env*", "Code_professor*"]
+
