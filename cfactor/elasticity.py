@@ -812,6 +812,88 @@ def _FEm_from_ADR(
 
 
 # ------------------------------------------------------------
+# Brute-force Eq.(12) integration (used only for degenerate cases)
+# ------------------------------------------------------------
+def _Em_from_eq12_bruteforce(
+    p: np.ndarray,
+    A: np.ndarray,
+    D: np.ndarray,
+    Nburger: float,
+    *,
+    n_phi: int = 8192,
+    denom_eps: float = 1e-14,
+) -> np.ndarray:
+    """Compute Em by numerically integrating Eq.(12) using Eq.(16).
+
+    This is intended as a deterministic fallback when Stroh roots are
+    *degenerate* (repeated or near-repeated), where the closed-form
+    expressions are prone to branch/limit issues.
+
+    Notes:
+      - Uses a fixed midpoint grid for phi in [0, 2π) to be deterministic.
+      - Returns the same 6x6 layout as _FEm_from_ADR:
+            row = 3*j + i, col = 3*l + k  with i,k=0..2 and j,l=0..1.
+      - Applies the same overall prefactor 8/|b|^2 as _FEm_from_ADR.
+    """
+    p = np.asarray(p, dtype=np.complex128).reshape(3)
+    A = np.asarray(A, dtype=np.complex128).reshape(3, 3)
+    D = np.asarray(D, dtype=np.complex128).reshape(3)
+
+    if n_phi is None or int(n_phi) <= 0:
+        n_phi = 8192
+    n_phi = int(n_phi)
+
+    # Deterministic midpoint rule grid
+    k = np.arange(n_phi, dtype=np.float64)
+    phi = (2.0 * np.pi) * (k + 0.5) / n_phi
+    c = np.cos(phi)
+    s = np.sin(phi)
+
+    # denom[a, k] = cos(phi) + p[a] sin(phi)
+    denom = c[None, :] + p[:, None] * s[None, :]
+    # Avoid extremely tiny denominators (should not happen for Im(p)>0, but be safe)
+    tiny = np.abs(denom) < denom_eps
+    if np.any(tiny):
+        denom = denom.copy()
+        denom[tiny] = denom[tiny] + denom_eps
+
+    # beta[i,j,k] where i=0..2 and j=0..1 (j corresponds to n=1,2 in the paper)
+    beta = np.zeros((3, 2, n_phi), dtype=np.float64)
+
+    # j=0 -> p^(0)=1 ; j=1 -> p^(1)=p
+    p_pow = np.vstack([np.ones_like(p), p])  # shape (2,3)
+    for j in (0, 1):
+        num = (A * D[None, :]) * p_pow[j][None, :]  # (3,3)
+        val = (num[:, :, None] / denom[None, :, :]).sum(axis=1)  # (3,n_phi)
+        beta[:, j, :] = np.imag(val)
+
+    # Eq.(12): E[i,j,k,l] = (1/pi) ∫ beta[i,j] * beta[k,l] dphi
+    # Use simple midpoint weights (uniform)
+    dphi = (2.0 * np.pi) / n_phi
+    E = np.zeros((3, 2, 3, 2), dtype=np.float64)
+    for i in range(3):
+        for j in range(2):
+            bij = beta[i, j, :]
+            for k_ in range(3):
+                for l in range(2):
+                    E[i, j, k_, l] = (1.0 / np.pi) * float(np.sum(bij * beta[k_, l, :]) * dphi)
+
+    pref = 0.0 if Nburger == 0.0 else (8.0 / (Nburger ** 2))
+    E *= pref
+    E[np.abs(E) < 1e-3] = 0.0
+
+    Em = np.zeros((6, 6), dtype=np.float64)
+    for j in range(2):
+        for i in range(3):
+            row = 3 * j + i
+            for l in range(2):
+                for k_ in range(3):
+                    col = 3 * l + k_
+                    Em[row, col] = E[i, j, k_, l]
+    return Em
+
+
+# ------------------------------------------------------------
 # Degenerate-limit Em
 # ------------------------------------------------------------
 def _Em_degenerate_limit(
@@ -946,6 +1028,94 @@ def _Em_degenerate_limit(
             return out
 
     raise RuntimeError("Degenerate-limit fallback failed: no stable Em found for any epsilon/regularizer.")
+
+
+# ------------------------------------------------------------
+# Deterministic degenerate fallback (root-splitting + extrapolation)
+#
+# Rationale:
+#   In true/near repeated-root Stroh cases, (A,L) and especially D can become
+#   ill-conditioned, causing Em to blow up (even if Eq.(12) is evaluated).
+#   A practical, stable workaround is to *deterministically* split the roots by
+#   a small, fixed perturbation to CinSS, evaluate Em with the standard
+#   non-degenerate closed-form machinery, and extrapolate eps -> 0.
+#
+#   This is intentionally used ONLY when 'degenerate' is detected.
+# ------------------------------------------------------------
+def _Em_degenerate_limit_deterministic(
+    CinSS: np.ndarray,
+    s: np.ndarray,
+    phi_deg: float,
+    Nburger: float,
+    *,
+    eps_list=(1e-6, 3e-6, 1e-5, 3e-5, 1e-4),
+    max_abs_Em: float = 1e12,
+) -> np.ndarray:
+    CinSS = np.asarray(CinSS, float)
+    scale = _regularization_scale(CinSS)
+
+    # Deterministic, diagonal (Voigt) perturbation pattern.
+    # Chosen to be sign-alternating to break symmetry in a repeatable way
+    # while keeping the perturbation small relative to ||CinSS||.
+    S = np.diag([1.0, -1.0, 0.5, -0.5, 0.25, -0.25]).astype(float)
+
+    xs: list[float] = []
+    Ems: list[np.ndarray] = []
+
+    for eps in eps_list:
+        x = float(eps * scale)
+        Ceps = CinSS + x * S
+        seps = _sinss_from_cinss(Ceps)
+
+        # Compute (p,A,L) on the perturbed (ideally non-degenerate) system.
+        p, A, L, dbg = stroh_eigensystem_from_cinss(
+            Ceps,
+            s=seps,
+            verbose=False,
+            return_debug=True,
+            snap_tol=1e-12,
+            # Make degeneracy detection stricter here: we *want* eps to split roots.
+            degeneracy_tol=1e-10,
+        )
+
+        # If still degenerate (eps too small), skip this point.
+        if bool(dbg.get("degenerate", False)):
+            continue
+
+        if _is_bad_stroh_basis(A, L, tol=1e-8):
+            continue
+
+        Dm = D_from_stroh_bilinear(A, L, phi_deg, Nburger)
+        Em = np.asarray(_FEm_from_ADR(A, Dm, p, Nburger, verbose=False), float)
+
+        if not np.all(np.isfinite(Em)):
+            continue
+        if float(np.max(np.abs(Em))) > float(max_abs_Em):
+            continue
+
+        xs.append(x)
+        Ems.append(Em)
+
+    if len(Ems) < 3:
+        raise RuntimeError(
+            "Degenerate deterministic fallback failed: could not obtain >=3 stable Em(eps) samples."
+        )
+
+    # Use the smallest 3 eps points for a linear extrapolation Em(eps)=Em0 + a*eps.
+    order = np.argsort(xs)
+    xs_fit = np.asarray([xs[i] for i in order[:3]], dtype=float)
+    Ems_fit = np.stack([Ems[i] for i in order[:3]], axis=0)  # (3,6,6)
+
+    # Linear least squares for each matrix element.
+    X = np.vstack([np.ones_like(xs_fit), xs_fit]).T  # (3,2)
+    Y = Ems_fit.reshape(3, -1)  # (3,36)
+    coeffs, *_ = np.linalg.lstsq(X, Y, rcond=None)  # (2,36)
+    Em0 = coeffs[0, :].reshape(6, 6)
+
+    if not np.all(np.isfinite(Em0)) or float(np.max(np.abs(Em0))) > float(max_abs_Em):
+        raise RuntimeError("Degenerate deterministic fallback produced non-finite or implausibly large Em0.")
+
+    return np.asarray(Em0, float)
 
 
 # ------------------------------------------------------------
@@ -1127,7 +1297,16 @@ def elastic_E_matrix(
     Dm = D_from_stroh_bilinear(A, L, ss.phi_deg, Nburger)
     Em_fem, fem_dbg = _FEm_from_ADR(A, Dm, p, Nburger, verbose=False, return_debug=True)
 
-    if deg or bad:
+    if deg:
+        # Degenerate (or near-degenerate) Stroh roots:
+        # Use a deterministic root-splitting perturbation of CinSS, compute Em with the
+        # standard non-degenerate machinery, and extrapolate eps -> 0.
+        Em = _Em_degenerate_limit_deterministic(CinSS, s, ss.phi_deg, Nburger)
+        fem_dbg["note"] = (
+            "Em returned is from _Em_degenerate_limit_deterministic (deterministic root-splitting + extrapolation); "
+            "Em inside FEm_dbg is diagnostic (_FEm_from_ADR) using the current (A,L,p)."
+        )
+    elif bad:
         Em = _Em_degenerate_limit(CinSS, s, ss.phi_deg, Nburger)
         fem_dbg["note"] = (
             "Em returned is from _Em_degenerate_limit; "
@@ -1183,7 +1362,12 @@ def elastic_E_matrix_debug(cf_input: ContrastFactorInput) -> tuple[np.ndarray, D
     deg = bool(stroh_dbg.get("degenerate", False))
     bad = _is_bad_stroh_basis(A_use, L_use, tol=1e-8)
 
-    if deg or bad:
+    if deg:
+        Dm = D_from_stroh_bilinear(A_use, L_use, cf_input.slip_system.phi_deg, Nburger)
+        Em = _Em_degenerate_limit_deterministic(CinSS, s, cf_input.slip_system.phi_deg, Nburger)
+        Em_fem, fem_dbg = _FEm_from_ADR(A_use, Dm, p, Nburger, verbose=False, return_debug=True)
+        fem_dbg["note"] = "Em returned is from _Em_degenerate_limit_deterministic (deterministic root-splitting + extrapolation); Em in FEm_dbg is diagnostic (_FEm_from_ADR)."
+    elif bad:
         Em = _Em_degenerate_limit(CinSS, s, cf_input.slip_system.phi_deg, Nburger)
         Dm = D_from_stroh_bilinear(A_use, L_use, cf_input.slip_system.phi_deg, Nburger)
         Em_fem, fem_dbg = _FEm_from_ADR(A_use, Dm, p, Nburger, verbose=False, return_debug=True)
