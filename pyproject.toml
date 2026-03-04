@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "DISCO: Dislocation Contrast Factor calculator"
 readme = "README.md"
 requires-python = ">=3.10"
-license = "MIT"
+license = { file = "LICENSE" }
 authors = [
   {name = "M. A. Malagutti"},
   {name = "P. Scardi"},
@@ -25,4 +25,5 @@ include-package-data = true
 where = ["."]
 include = ["cfactor*", "disco*"]
 exclude = ["output_fit*", "cFactor_env*", "Code_professor*"]
+
 
