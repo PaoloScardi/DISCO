@@ -1,15 +1,19 @@
-Perfect — below is the **pure text version** (no emojis, no badges, no special formatting).
-You can copy and paste this directly into GitHub.
 
 ---
 
 # DISCO – Dislocation Contrast Factor Calculator
 
-DISCO is a general Python-based software tool for the computation of dislocation contrast factors (CFs) for arbitrary crystal structures and slip systems.
+DISCO is a Python-based software tool for the computation of **dislocation contrast factors (CFs)** for arbitrary crystal structures and slip systems.
 
-It implements the general formalism of Martinez-Garcia et al. (Acta Cryst. A65, 109–119, 2009) and extends it to all space groups and Laue symmetries.
+It implements the general formalism of:
 
-DISCO supports:
+Martinez-Garcia et al., *Acta Cryst. A65*, 109–119 (2009)
+
+and extends it to all space groups and Laue symmetries.
+
+---
+
+## Features
 
 * All 230 space groups
 * Single-crystal contrast factors
@@ -18,24 +22,29 @@ DISCO supports:
 * Automatic invariant polynomial coefficient extraction
 * TOPAS WPPM macro generation
 
+---
+
 ## Scientific Reference
 
 If you use DISCO, please cite:
 
-Malagutti, M. A., D’Incau, M., & Scardi, P., Journal of Applied Crystallography (2026).
+Malagutti, M. A., D’Incau, M., & Scardi, P.
+*Journal of Applied Crystallography* (2026).
 DOI: (to be added)
 
 The theoretical basis follows:
 
 Martinez-Garcia, J., Leoni, M., & Scardi, P. (2009).
-A general approach for determining the diffraction contrast factor of straight-line dislocations.
+*A general approach for determining the diffraction contrast factor of straight-line dislocations.*
 Acta Crystallographica Section A, 65, 109–119.
 [https://doi.org/10.1107/S010876730804186X](https://doi.org/10.1107/S010876730804186X)
+
+---
 
 ## Software Availability
 
 Source code:
-GitHub: (repository link)
+[https://github.com/PaoloScardi/DISCO](https://github.com/PaoloScardi/DISCO)
 
 Archived version (citable):
 Zenodo DOI: (to be added after release)
@@ -43,45 +52,97 @@ Zenodo DOI: (to be added after release)
 Web interface (JSON builder + server execution):
 [https://energymaterials.unitn.it/tools/software/disco.html](https://energymaterials.unitn.it/tools/software/disco.html)
 
-## Requirements
+---
+
+# Requirements
 
 * Python ≥ 3.11
 * numpy
 * scipy
 * pandas
 
-## Installation
+---
 
-Linux / macOS:
+# Installation (Recommended: from GitHub)
 
+The recommended installation method is via a Git clone and a virtual environment.
+
+---
+
+## 1. Clone the repository
+
+```bash
+git clone https://github.com/PaoloScardi/DISCO
+cd DISCO
 ```
-python3 -m pip install --upgrade pip
-python3 -m pip install . --upgrade
+
+---
+
+## 2. Create a virtual environment
+
+### Windows (PowerShell)
+
+```powershell
+py -3.11 -m venv .venv
 ```
 
-Windows (PowerShell):
+(or `py -3.12`, `py -3.14`, etc., depending on your installed version)
 
-```
-pip install . --upgrade
+Activate (optional):
+
+```powershell
+.\.venv\Scripts\Activate.ps1
 ```
 
-## Usage
+If activation is blocked:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+```
+
+Alternatively, you can skip activation and call the interpreter directly.
+
+---
+
+### Linux / macOS
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+---
+
+## 3. Install DISCO (editable mode)
+
+Editable mode is recommended for development and debugging.
+
+```bash
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -e .
+```
+
+Editable mode ensures that any source code changes are immediately reflected without reinstalling.
+
+---
+
+# Usage
 
 Run DISCO with:
 
-```
+```bash
 discocf input.json
 ```
 
 Display help:
 
-```
+```bash
 discocf --help
 ```
 
 Specify a custom output directory:
 
-```
+```bash
 discocf input.json -o results_folder
 ```
 
@@ -91,63 +152,94 @@ By default, outputs are written to:
 <input_directory>/output_fit
 ```
 
-## Input File Overview
+---
+
+# Input File Overview
 
 DISCO requires a JSON file containing:
 
-* Crystal structure
+### Crystal structure
 
-  * space_group
-  * lattice parameters (a, b, c, alpha, beta, gamma as required)
+* `space_group`
+* lattice parameters (`a, b, c, alpha, beta, gamma` as required)
 
-* Elastic stiffness constants (in GPa)
+### Elastic stiffness constants
 
-* Slip system definition
+* Provided in GPa
 
-  * plane_hkl
-  * burgers_uvw
-  * phi_deg
+### Slip system definition
 
-    * phi = 0° → screw
-    * phi = 90° → edge
+* `plane_hkl`
+* `burgers_uvw`
+* `phi_deg`
 
-* List of diffraction reflections (hkls)
+where:
 
-Example input files are available in the examples folder.
+* `phi = 0°` → screw
+* `phi = 90°` → edge
 
-A detailed description of the input structure is available in:
+### Diffraction reflections
+
+* `hkls`
+
+Example input files are available in:
+
+```
+examples/
+```
+
+Full specification:
 
 ```
 docs/INPUT_FORMAT.md
 ```
 
-## Output Files
+---
+
+# Output Files
 
 DISCO generates:
 
 * Single-crystal contrast factors
 * Powder-averaged contrast factors
-* Symmetry invariant coefficients (Gamma_hkl expansion)
+* Symmetry invariant coefficients (Γ_hkl expansion)
 * TOPAS macro snippet for WPPM
-* Detailed .run.log file containing input parameters and intermediate data
+* Detailed `.run.log` file containing input parameters and intermediate data
 
-A full description of output files is available in:
+Full description:
 
 ```
 docs/OUTPUT_FORMAT.md
 ```
 
-## License
+---
+
+# Development Notes
+
+For debugging in Visual Studio / VS Code:
+
+* Open the cloned repository folder
+* Select the `.venv` interpreter
+* Install in editable mode (`pip install -e .`)
+* Run `discocf` from the integrated terminal
+
+---
+
+# License
 
 DISCO is distributed under the GNU General Public License v3.0 (GPL-3.0).
 
 Commercial use or integration into proprietary software requires explicit permission from the authors.
 
-## Version
+---
+
+# Version
 
 DISCO v1.0.0 (2026)
 
-## Authors
+---
+
+# Authors
 
 Marcelo A. Malagutti
 Mirco D’Incau
@@ -157,4 +249,3 @@ Department of Civil, Environmental & Mechanical Engineering
 University of Trento, Italy
 
 ---
-
