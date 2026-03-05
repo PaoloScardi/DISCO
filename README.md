@@ -235,7 +235,7 @@ Commercial use or integration into proprietary software requires explicit permis
 
 # Version
 
-DISCO v1.0.0 (2026)
+DISCO v1.0.1 (2026)
 
 ---
 
