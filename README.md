@@ -46,8 +46,8 @@ Acta Crystallographica Section A, 65, 109–119.
 Source code:
 [https://github.com/PaoloScardi/DISCO](https://github.com/PaoloScardi/DISCO)
 
-Archived version (citable):
-Zenodo DOI: (to be added after release)
+Archived version (1.01):
+Zenodo DOI: https://doi.org/10.5281/zenodo.18875170
 
 Web interface (JSON builder + server execution):
 [https://energymaterials.unitn.it/tools/software/disco.html](https://energymaterials.unitn.it/tools/software/disco.html)
