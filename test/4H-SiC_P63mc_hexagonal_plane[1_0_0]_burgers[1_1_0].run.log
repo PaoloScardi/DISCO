@@ -1,0 +1,366 @@
+[INFO] Contrast_Factor version: 1.01
+[DEBUG] elasticity.py loaded from: G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\cfactor\elasticity.py
+[DEBUG] contrast.py loaded from: G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\cfactor\contrast.py
+[DEBUG] geometry.py loaded from: G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\cfactor\geometry.py
+
+============================================================
+[Input] contrast_factors.json path: G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\contrast_factors.json
+[Input] contrast_factors.json contents (JSON):
+{
+  "material_name": "4H-SiC_P63mc",
+  "space_group": 186,
+  "cell": {
+    "lattice": "hexagonal",
+    "a": 6.146,
+    "b": 6.146,
+    "c": 20.106,
+    "alpha": 90.0,
+    "beta": 90.0,
+    "gamma": 120.0
+  },
+  "elastic": {
+    "units": "GPa",
+    "C11": 501.0,
+    "C12": 111.0,
+    "C13": 52.0,
+    "C33": 553.0,
+    "C44": 163.0,
+    "C66": 195.0
+  },
+  "slip_systems": [
+    {
+      "plane_hkl": [
+        1,
+        0,
+        -1,
+        0
+      ],
+      "burgers_uvw": [
+        1,
+        1,
+        -2,
+        0
+      ],
+      "phi_deg": [
+        0.0,
+        90.0
+      ]
+    }
+  ],
+  "hkls": [
+    [
+      1,
+      0,
+      0
+    ],
+    [
+      1,
+      0,
+      1
+    ],
+    [
+      0,
+      0,
+      4
+    ],
+    [
+      1,
+      0,
+      2
+    ],
+    [
+      1,
+      0,
+      3
+    ],
+    [
+      1,
+      0,
+      4
+    ],
+    [
+      1,
+      0,
+      5
+    ],
+    [
+      1,
+      1,
+      0
+    ],
+    [
+      1,
+      0,
+      6
+    ],
+    [
+      2,
+      0,
+      0
+    ],
+    [
+      2,
+      0,
+      1
+    ],
+    [
+      1,
+      1,
+      4
+    ],
+    [
+      2,
+      0,
+      2
+    ],
+    [
+      1,
+      0,
+      7
+    ],
+    [
+      0,
+      0,
+      8
+    ],
+    [
+      2,
+      0,
+      3
+    ],
+    [
+      2,
+      0,
+      5
+    ],
+    [
+      2,
+      0,
+      6
+    ],
+    [
+      2,
+      1,
+      1
+    ],
+    [
+      2,
+      1,
+      2
+    ]
+  ]
+}
+============================================================
+
+=== Slip system group ===
+Material: 4H-SiC_P63mc
+Space group: 186 ()
+Lattice (inferred/used): hexagonal
+Laue symbol (legacy, optional): 
+Plane (HKL) = (1, 0, 0), Burgers [UVW] = (1, 1, 0)
+
+== Cell parameters ==
+  Lattice = hexagonal
+  a = 6.146000, b = 6.146000, c = 20.106000 Å
+  alpha = 90.000000°, beta = 90.000000°, gamma = 120.000000°
+
+== Elastic stiffness C (GPa), Voigt 6x6 ==
+[[501. 111.  52.   0.   0.   0.]
+ [111. 501.  52.   0.   0.   0.]
+ [ 52.  52. 553.   0.   0.   0.]
+ [  0.   0.   0. 163.   0.   0.]
+ [  0.   0.   0.   0. 163.   0.]
+ [  0.   0.   0.   0.   0. 195.]]
+
+== Requested HKL list ==
+   (1,0,0), (1,0,1), (0,0,4), (1,0,2), (1,0,3), (1,0,4), (1,0,5), (1,1,0), (1,0,6), (2,0,0), (2,0,1), (1,1,4), (2,0,2), (1,0,7), (0,0,8), (2,0,3), (2,0,5), (2,0,6), (2,1,1), (2,1,2)
+
+------------------------------------------------------------
+--- Dislocation state: phi = 0.000 deg ---
+
+[P_rows_cart] (orthonormal Cartesian rows = e1,e2,e3):
+[[0.       0.       0.5     ]
+ [0.866025 0.5      0.      ]
+ [0.5      0.866025 0.      ]]
+
+[P_rows_crys] (Mathematica Base->Crystal rows):
+[[-0.       -0.        0.024868]
+ [ 0.187878  0.093939  0.      ]
+ [ 0.162707  0.162707  0.      ]]
+
+[CinSS] stiffness in slip frame (Voigt 6x6):
+[[ 34.5625    13.        13.        11.25833    0.         0.      ]
+ [ 13.       501.       403.5      433.878727   0.         0.      ]
+ [ 13.       403.5      501.       433.878727   0.         0.      ]
+ [ 11.25833  433.878727 433.878727 424.5        0.         0.      ]
+ [  0.         0.         0.         0.        40.75      35.290535]
+ [  0.         0.         0.         0.        35.290535  40.75    ]]
+
+[Stroh] b_slip (Burgers in slip frame, bu):
+[0.       5.322592 6.146   ]
+
+[Stroh] eigenvalues p (selected):
+[0.+0.8292554721j 0.+0.3167344958j 0.+0.4571371337j]
+
+[Stroh] method: eig
+[Stroh] degenerate: False
+
+[Stroh] p_raw:
+[-0.+0.829255472148j -0.+0.457137133664j  0.+0.316734495829j]
+
+[Stroh] p_clean:
+[0.+0.829255472148j 0.+0.457137133664j 0.+0.316734495829j]
+
+[Stroh] p_snap:
+[0.+0.829255472148j 0.+0.457137133664j 0.+0.316734495829j]
+
+[Stroh] Gram G = A^T L (eig):
+[[ 0.            -0.005836897433j -0.001668852472+0.j
+   0.            +0.j            ]
+ [ 0.001668852472+0.j              0.            -0.002937525901j
+   0.            +0.j            ]
+ [ 0.            +0.j              0.            -0.j
+   0.            -0.044714796283j]]
+
+[Stroh] Gram G = A^T L (LL/AA):
+[[ 1.            +0.j              0.            -0.206551293384j
+  -1.31672010147 +0.j            ]
+ [ 0.            +0.786401272195j  1.            +0.j
+   0.            -3.158629145949j]
+ [ 0.199811791487+0.j              0.            +0.457009157272j
+   1.            +0.j            ]]
+
+[Mathematica] LL matrix:
+[[-0.          -0.8292554721j  0.          +0.3657334929j
+  -0.          -0.4571371337j]
+ [ 1.          +0.j           -1.1547005384-0.j
+   1.          +0.j          ]
+ [ 0.8660254038-0.j           -1.          +0.j
+   0.8660254038+0.j          ]]
+
+[Mathematica] A matrix:
+[[-0.0208505216+0.j            0.0042601011+0.j
+  -0.0068640252+0.j          ]
+ [ 0.          -0.0030594184j  0.          +0.0076257341j
+   0.          -0.0047559392j]
+ [ 0.          -0.j            0.          +0.j
+   0.          +0.j          ]]
+
+[Em] (6x6 used for the contrast factor at this phi):
+[[ 0.429052  0.        0.        0.       -0.137922  0.207352]
+ [ 0.        0.285489  0.535414 -0.137922  0.        0.      ]
+ [ 0.        0.535414  2.187527 -1.154735  0.        0.      ]
+ [ 0.       -0.137922 -1.154735  0.760761  0.        0.      ]
+ [-0.137922  0.        0.        0.        0.050759 -0.111888]
+ [ 0.207352  0.        0.        0.       -0.111888  0.457137]]
+
+------------------------------------------------------------
+--- Dislocation state: phi = 90.000 deg ---
+
+[P_rows_cart] (orthonormal Cartesian rows = e1,e2,e3):
+[[-0.25      0.433013  0.      ]
+ [ 0.866025  0.5       0.      ]
+ [ 0.75      0.433013 -0.5     ]]
+
+[P_rows_crys] (Mathematica Base->Crystal rows):
+[[ 0.        0.081354  0.      ]
+ [ 0.187878  0.093939  0.      ]
+ [ 0.162707  0.081354 -0.024868]]
+
+[CinSS] stiffness in slip frame (Voigt 6x6):
+[[ 31.3125    27.75      24.0625    24.032205   0.         0.      ]
+ [ 27.75     501.       388.75     433.878727   0.         0.      ]
+ [ 24.0625   388.75     458.125    407.248446   0.         0.      ]
+ [ 24.032205 433.878727 407.248446 416.5        0.         0.      ]
+ [  0.         0.         0.         0.        46.75      42.218738]
+ [  0.         0.         0.         0.        42.218738  48.75    ]]
+
+[Stroh] b_slip (Burgers in slip frame, bu):
+[1.5365   5.322592 4.6095  ]
+
+[Stroh] eigenvalues p (selected):
+[-0.0000000003+0.5000000166j  0.0000000003+0.4999999834j
+  0.          +0.5j         ]
+
+[Stroh] method: LLAA_colnorm_deg_snap
+[Stroh] degenerate: True
+
+[Stroh] p_raw:
+[-0.000000000271+0.500000016622j -0.            +0.5j
+  0.000000000271+0.499999983378j]
+
+[Stroh] p_clean:
+[-0.000000000271+0.500000016622j  0.            +0.5j
+  0.000000000271+0.499999983378j]
+
+[Stroh] p_snap:
+[-0.000000000271+0.500000016622j  0.            +0.5j
+  0.000000000271+0.499999983378j]
+
+[Stroh] Gram G = A^T L (eig):
+[[ 0.000000000005-0.000000000279j  0.000000000002-0.000000000109j
+  -0.000000000088-0.000000000015j]
+ [-0.000000000002+0.000000000109j -0.000000000005+0.000000000279j
+   0.000000000088+0.000000000015j]
+ [-0.000000000039-0.000000000007j  0.000000000039+0.000000000007j
+   0.            -0.020798499522j]]
+
+[Stroh] Gram G = A^T L (LL/AA):
+[[ 1.            +0.000000000029j -0.389221424237-0.00000000096j
+  -0.000000000006+0.000000000388j]
+ [-0.389221616089+0.000000000378j  1.000000001863-0.000000000058j
+   0.000000000006-0.000000000388j]
+ [ 0.305389206856+0.00000000064j   0.305389262736-0.000000000728j
+   0.            -0.j            ]]
+
+[Mathematica] LL matrix:
+[[ 0.0000000003-0.5000000166j  0.0000000003+0.5773502395j
+  -0.          -0.5j         ]
+ [ 1.          +0.j           -1.1547005173-0.0000000001j
+   1.          +0.j          ]
+ [ 0.8660254055-0.j           -1.          +0.j
+   0.8660254038+0.j          ]]
+
+[Mathematica] A matrix:
+[[-0.0102564108-0.j            0.0118430816-0.j
+  -0.0102564103+0.j          ]
+ [-0.          -0.0051282049j -0.          +0.0059215405j
+   0.          -0.0051282051j]
+ [-0.          -0.0000000001j  0.          +0.0000000009j
+   0.          -0.j          ]]
+
+[Em] (6x6 used for the contrast factor at this phi):
+[[ 1.151493  0.        0.        0.       -0.017516  0.      ]
+ [ 0.        0.287873  0.       -0.406737  0.        0.      ]
+ [ 0.        0.        0.        0.        0.        0.      ]
+ [ 0.       -0.406737  0.        0.898652  0.        0.      ]
+ [-0.017516  0.        0.        0.        0.012536  0.      ]
+ [ 0.        0.        0.        0.        0.        0.      ]]
+
+Writing results to: G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\test\4H-SiC_P63mc_hexagonal_plane[1_0_0]_burgers[1_1_0].txt
+[TOPAS] WPPM input written: G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\test\4H-SiC_P63mc_hexagonal_plane[1_0_0]_burgers[1_1_0].wppm.inp
+
+========================================
+Invariant fit completed (multi-phi)
+Fit outputs (per phi) [TOPAS only]:
+
+=== PHI = 0 deg ===
+phi = 0 deg
+ E1 =  6.67202085488
+ E2 =  1.69221000589
+ E3 =  0.0599373261427
+metrics: {'rmse': 2.021195263230433e-09, 'max_abs_resid': 3.987565833085682e-09, 'r2': 1.0, 'n': 20, 'n_params': 3}
+  csv: G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\test\4H-SiC_P63mc_hexagonal_plane[1_0_0]_burgers[1_1_0]_comparison_phi0.csv
+
+=== PHI = 90 deg ===
+phi = 90 deg
+ E1 =  12.5914149452
+ E2 =  0.133366460467
+ E3 =  0.000985098269503
+metrics: {'rmse': 2.386019930238249e-09, 'max_abs_resid': 3.743263921052176e-09, 'r2': 1.0, 'n': 20, 'n_params': 3}
+  csv: G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\test\4H-SiC_P63mc_hexagonal_plane[1_0_0]_burgers[1_1_0]_comparison_phi90.csv
+Run log written:
+   G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\test\4H-SiC_P63mc_hexagonal_plane[1_0_0]_burgers[1_1_0].run.log
+========================================
+Writing single-crystal (screw) TSV to: G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\test\4H-SiC_P63mc_hexagonal_plane[1_0_0]_burgers[1_1_0].single_crystal_screw.tsv
+Writing single-crystal (edge) TSV to: G:\Il mio Drive\DICAM\VisualStudio\Contrast_Factor\PaoloScardi\DISCO\test\4H-SiC_P63mc_hexagonal_plane[1_0_0]_burgers[1_1_0].single_crystal_edge.tsv
