@@ -54,7 +54,7 @@ Web interface (JSON builder + server execution):
 
 ---
 
-# Requirements
+# Requirements (libraries will be installed automatically with the environment below)
 
 * Python ≥ 3.11
 * numpy
@@ -113,9 +113,9 @@ source .venv/bin/activate
 
 ---
 
-## 3. Install DISCO (editable mode)
+## 3. Install DISCO 
 
-Editable mode is recommended for development and debugging.
+Run the following in the same folder as the pyproject.toml
 
 ```bash
 python -m pip install --upgrade pip setuptools wheel
