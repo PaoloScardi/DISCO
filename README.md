@@ -122,8 +122,6 @@ python -m pip install --upgrade pip setuptools wheel
 python -m pip install -e .
 ```
 
-Editable mode ensures that any source code changes are immediately reflected without reinstalling.
-
 ---
 
 # Usage
