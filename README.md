@@ -69,7 +69,7 @@ The recommended installation method is via a Git clone and a virtual environment
 
 ---
 
-## 1. Clone the repository
+## 1. Clone the repository (in Power Shell or Linux prompt)
 
 ```bash
 git clone https://github.com/PaoloScardi/DISCO
@@ -126,13 +126,15 @@ python -m pip install -e .
 
 # Usage
 
-Run DISCO with:
+Run DISCO in the same folder where the .json file is located with:
 
 ```bash
 discocf input.json
 ```
+(input.json is a place holder here, put the name of your .json file)
+See the examples folder with some ready-to-use .json files
 
-Display help:
+Display help for more information:
 
 ```bash
 discocf --help
